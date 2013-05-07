@@ -2,30 +2,27 @@
 //  ofxAnimatableItem.cpp
 //  exampleAdvanced
 //
-//  Created by Wanda on 06/05/13.
+//  Created by jvelazqueztraut on 06/05/13.
 //
-//
+//  masOTROS SRL
 
-#include "ofxAnimatableItem.h"
+#include "ofxAnimatableObject.h"
 
-ofxAnimatableItem::ofxAnimatableItem(){
-    
-	uniqueVal=ofRandom(-1000,1000);
-    
+ofxAnimatableObject::ofxAnimatableObject(){
     size.reset(1.);
     color.setColor(ofColor(255));
     position.setPosition(ofPoint(0.,0.,0.));
     rotation.setPosition(ofPoint(0.,0.,0.));
 }
 
-void ofxAnimatableItem::update(float dt){
+void ofxAnimatableObject::update(float dt){
     size.update(dt);
     color.update(dt);
     position.update(dt);
     rotation.update(dt);
 }
 
-void ofxAnimatableItem::beginDraw(){
+void ofxAnimatableObject::beginDraw(){
     ofPushMatrix();
     ofPushStyle();
     ofTranslate(position.getCurrentPosition());
@@ -37,41 +34,41 @@ void ofxAnimatableItem::beginDraw(){
     ofSetColor(color.getCurrentColor());
 }
 
-void ofxAnimatableItem::endDraw(){
+void ofxAnimatableObject::endDraw(){
     ofPopStyle();
     ofPopMatrix();
 }
 
-void ofxAnimatableItem::setPosition(ofPoint p){
+void ofxAnimatableObject::setPosition(ofPoint p){
     position.setPosition(p);
 }
-void ofxAnimatableItem::setPosition(float x, float y,float z){
+void ofxAnimatableObject::setPosition(float x, float y,float z){
     setPosition(ofPoint(x,y,z));
 }
-void ofxAnimatableItem::setSize(float s){
+void ofxAnimatableObject::setSize(float s){
     size.reset(s);
 }
 
-void ofxAnimatableItem::setColor(ofColor c){
+void ofxAnimatableObject::setColor(ofColor c){
     color.setColor(c);
 }
-void ofxAnimatableItem::setColor(int r, int g, int b, int a){
+void ofxAnimatableObject::setColor(int r, int g, int b, int a){
     setColor(ofColor(r,g,b,a));
 }
-void ofxAnimatableItem::setColor(int b, int a){
+void ofxAnimatableObject::setColor(int b, int a){
     setColor(ofColor(b,a));
 }
-void ofxAnimatableItem::setColor(int b){
+void ofxAnimatableObject::setColor(int b){
     setColor(ofColor(b));
 }
-void ofxAnimatableItem::setRotation(ofPoint r){
+void ofxAnimatableObject::setRotation(ofPoint r){
     rotation.setPosition(r);
 }
-void ofxAnimatableItem::setRotation(float x, float y, float z){
+void ofxAnimatableObject::setRotation(float x, float y, float z){
     setRotation(ofPoint(x,y,z));
 }
 
-bool ofxAnimatableItem::isOrWillBeAnimating(){
+bool ofxAnimatableObject::isOrWillBeAnimating(){
     return (position.isOrWillBeAnimating() || size.isOrWillBeAnimating() || color.isOrWillBeAnimating() || rotation.isOrWillBeAnimating());
 }
 

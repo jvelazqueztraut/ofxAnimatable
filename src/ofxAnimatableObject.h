@@ -2,7 +2,7 @@
 //  ofxAnimatableItem.h
 //  exampleAdvanced
 //
-//  Created by Wanda on 06/05/13.
+//  Created by jvelazqueztraut on 06/05/13.
 //
 //  masOTROS SRL
 
@@ -12,10 +12,10 @@
 #include "ofxAnimatableOfPoint.h"
 #include "ofxAnimatableOfColor.h"
 
-class ofxAnimatableItem {
+class ofxAnimatableObject {
 public:
-    ofxAnimatableItem();
-    virtual ~ofxAnimatableItem(void){};
+    ofxAnimatableObject();
+    virtual ~ofxAnimatableObject(void){};
     
     void update(float dt);
     
@@ -45,6 +45,5 @@ public:
     ofxAnimatableOfColor	color;
     ofxAnimatableOfPoint	position;
     ofxAnimatableOfPoint    rotation;
-    
-    float uniqueVal;
+
 };

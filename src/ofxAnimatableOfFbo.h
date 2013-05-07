@@ -2,15 +2,15 @@
 //  ofxAnimatableFBO.h
 //  exampleAdvanced
 //
-//  Created by Wanda on 06/05/13.
+//  Created by jvelazqueztraut on 06/05/13.
 //
 //  masOTROS SRL
 
 #pragma once
 
-#include "ofxItem.h"
+#include "ofxAnimatableObject.h"
 
-class ofxAnimatableFBO : public ofxAnimatableItem {
+class ofxAnimatableOfFbo : public ofxAnimatableObject {
 public:
     ~ofxAnimatableFBO(){};
     
@@ -20,15 +20,19 @@ public:
         ofClear(0,0);
         fbo.end();
     }
-    void update(float dt){
-        ofxItem::update(dt);
+    
+    void begin(){
         fbo.begin();
+    }
+    
+    void end(){
         fbo.end();
     }
+    
     void draw(){
-        ofxAnimatableItem::beginDraw();
+        ofxAnimatableObject::beginDraw();
         fbo.draw(0,0);
-        ofxAnimatableItem::endDraw();
+        ofxAnimatableObject::endDraw();
     }
     
     void setAnchorPercent(float xPct,float yPct){

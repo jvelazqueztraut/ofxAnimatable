@@ -2,15 +2,15 @@
 //  ofxAnimatableImage.h
 //  exampleAdvanced
 //
-//  Created by Wanda on 06/05/13.
+//  Created by jvelazqueztraut on 06/05/13.
 //
 //  masOTROS SRL
 
 #pragma once
 
-#include "ofxAnimatableItem.h"
+#include "ofxAnimatableObject.h"
 
-class ofxAnimatableImage : public ofxAnimatableItem {
+class ofxAnimatableOfImage : public ofxAnimatableObject {
     
 public:
     ~ofxAnimatableImage(){};
@@ -18,11 +18,13 @@ public:
     void loadImage(string file){
         image.loadImage(file);
     }
+    
     void draw(){
-        ofxAnimatableItem::beginDraw();
+        ofxAnimatableObject::beginDraw();
         image.draw(0,0);
-        ofxAnimatableItem::endDraw();
+        ofxAnimatableObject::endDraw();
     }
+    
     void setAnchorPercent(float xPct,float yPct){
         image.setAnchorPercent(xPct,yPct);
     }
