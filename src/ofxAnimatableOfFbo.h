@@ -12,7 +12,7 @@
 
 class ofxAnimatableOfFbo : public ofxAnimatableObject {
 public:
-    ~ofxAnimatableFBO(){};
+    ~ofxAnimatableOfFbo(){};
     
     void setup(int w, int h){
         fbo.allocate(w,h);

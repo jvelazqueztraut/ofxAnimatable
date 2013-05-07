@@ -2,6 +2,10 @@
 
 #include "ofMain.h"
 
+#include "ofxAnimatableOfImage.h"
+#include "ofxAnimatableOfVideoPlayer.h"
+#include "ofxAnimatableOfFbo.h"
+
 class testApp : public ofBaseApp{
 
 	public:

@@ -13,7 +13,7 @@
 class ofxAnimatableOfVideoPlayer : public ofxAnimatableObject {
     
 public:
-    ~ofxAnimatableVideo(){};
+    ~ofxAnimatableOfVideoPlayer(){};
     
     void loadMovie(string name){
         movie.loadMovie(name);

@@ -13,7 +13,7 @@
 class ofxAnimatableOfImage : public ofxAnimatableObject {
     
 public:
-    ~ofxAnimatableImage(){};
+    ~ofxAnimatableOfImage(){};
     
     void loadImage(string file){
         image.loadImage(file);
