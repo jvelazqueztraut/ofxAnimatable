@@ -13,6 +13,8 @@
 ofxAnimatableOfPoint::ofxAnimatableOfPoint(){
 
 	ofxAnimatable::setup();	//defaults to (0,0,0) >> (0,0,0)
+    
+    usePath=false;
 }
 
 
@@ -105,10 +107,44 @@ void ofxAnimatableOfPoint::animateToIfFinished( ofPoint where ){
 
 ofPoint ofxAnimatableOfPoint::getCurrentPosition(){
 	float mappedDistribution = calcCurveAt(percentDone_);	///percentDone_ is [0..1] & tells me where we are between orig and target
+    
+    if(usePath){
+        ofVec3f mappedPath = calcPathAt(mappedDistribution);
+        
+        return originalPoint_ + ( targetPoint_ - originalPoint_) * mappedPath ;
+    }
+    
 	return originalPoint_ + ( targetPoint_ - originalPoint_) * mappedDistribution ;
 }
 
 
 void ofxAnimatableOfPoint::startAfterWait(){
 	animateTo(targetTempPoint_);
+}
+
+void ofxAnimatableOfPoint::setUsePath(bool _usePath){
+    usePath=(_usePath && path.size());
+}
+
+void ofxAnimatableOfPoint::loadPath(string _file){
+    path.clear();
+    ofBuffer buf=ofBufferFromFile(_file);
+    //Read file line by line
+    while (!buf.isLastLine()) {
+        string line = buf.getNextLine();
+        //Split line into strings
+        vector<string> p = ofSplitString(line, ",");
+        path.addVertex(ofToFloat(p[0]),ofToFloat(p[1]));
+    }
+
+}
+
+void ofxAnimatableOfPoint::loadPath(ofPolyline _path){
+    path.clear();
+    path=_path;
+}
+
+
+ofVec3f ofxAnimatableOfPoint::calcPathAt(float _pct){
+    return path[ofClamp(_pct*(path.size()-1),0,path.size()-1)];
 }

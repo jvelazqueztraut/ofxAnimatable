@@ -45,7 +45,10 @@ class ofxAnimatableOfPoint : public ofxAnimatable{
 		ofPoint getCurrentPosition();
 		ofPoint getTargetPosition(){ return targetPoint_;}
 		ofPoint getOriginalPosition(){ return originalPoint_;}
-	
+    
+    void setUsePath(bool _usePath);
+    void loadPath(string _file);
+    void loadPath(ofPolyline _path);
 
 	private:
 
@@ -54,7 +57,10 @@ class ofxAnimatableOfPoint : public ofxAnimatable{
 		ofPoint 		originalPoint_;
 		ofPoint 		targetPoint_;
 		ofPoint 		targetTempPoint_;
-
+    
+        bool                usePath;
+        ofPolyline          path;
+        ofPoint             calcPathAt(float _pct);
 
 };
 
