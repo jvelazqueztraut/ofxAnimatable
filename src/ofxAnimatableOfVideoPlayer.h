@@ -10,33 +10,19 @@
 
 #include "ofxAnimatableObject.h"
 
-class ofxAnimatableOfVideoPlayer : public ofxAnimatableObject {
+class ofxAnimatableOfVideoPlayer : public ofxAnimatableObject, public ofVideoPlayer {
     
 public:
     ~ofxAnimatableOfVideoPlayer(){};
     
-    void loadMovie(string name){
-        movie.loadMovie(name);
-    }
-    
-    void setLoopState(ofLoopType l){
-        movie.setLoopState(l);
-    }
-    
     void update(float dt){
         ofxAnimatableObject::update(dt);
-        movie.update();
+        ofVideoPlayer::update();
     }
     
     void draw(){
         ofxAnimatableObject::beginDraw();
-        movie.draw(0,0);
+        ofVideoPlayer::draw(0,0);
         ofxAnimatableObject::endDraw();
     }
-    
-    void setAnchorPercent(float xPct,float yPct){
-        movie.setAnchorPercent(xPct,yPct);
-    }
-    
-    ofVideoPlayer     movie;
 };

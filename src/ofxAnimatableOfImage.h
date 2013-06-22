@@ -10,24 +10,14 @@
 
 #include "ofxAnimatableObject.h"
 
-class ofxAnimatableOfImage : public ofxAnimatableObject {
+class ofxAnimatableOfImage : public ofxAnimatableObject, public ofImage {
     
 public:
     ~ofxAnimatableOfImage(){};
     
-    void loadImage(string file){
-        image.loadImage(file);
-    }
-    
     void draw(){
         ofxAnimatableObject::beginDraw();
-        image.draw(0,0);
+        ofImage::draw(0,0);
         ofxAnimatableObject::endDraw();
     }
-    
-    void setAnchorPercent(float xPct,float yPct){
-        image.setAnchorPercent(xPct,yPct);
-    }
-
-    ofImage     image;
 };
