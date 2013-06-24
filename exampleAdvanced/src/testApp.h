@@ -2,10 +2,7 @@
 
 #include "ofMain.h"
 
-#include "ofxAnimatableOfImage.h"
-#include "ofxAnimatableOfVideoPlayer.h"
-#include "ofxAnimatableOfFbo.h"
-#include "ofxAnimatableOfxSprite.h"
+#include "ofxAnimatableObject.h"
 
 class testApp : public ofBaseApp{
 
@@ -24,6 +21,6 @@ class testApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-    ofxAnimatableOfxSprite sprite;
+    ofxAnimatableObject<ofImage> img;
 		
 };

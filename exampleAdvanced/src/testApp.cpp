@@ -3,35 +3,22 @@
 //--------------------------------------------------------------
 void testApp::setup(){
     
-    sprite.addFile("conejo1.png");
-    sprite.addFile("conejo2.png");
-    sprite.addFile("conejo3.png");
-    sprite.addFile("conejo4.png");
-    sprite.addFile("conejo5.png");
-    sprite.addFile("conejo6.png");
-    sprite.addFile("conejo5.png");
-    sprite.addFile("conejo4.png");
-    sprite.addFile("conejo3.png");
-    sprite.addFile("conejo2.png");
-    
-    sprite.setFrameRate(24);
-    
-    sprite.play();
-    
-    sprite.position.setRepeatType(LOOP_BACK_AND_FORTH);
-    sprite.position.setDuration(5.);
-    sprite.position.animateTo(ofPoint(0.5*ofGetWidth(),0.5*ofGetHeight()));
+    img.loadImage("conejo1.png");
+       
+    img.position.setRepeatType(LOOP_BACK_AND_FORTH);
+    img.position.setDuration(5.);
+    img.position.animateTo(ofPoint(0.5*ofGetWidth(),0.5*ofGetHeight()));
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
     float dt=1./ofGetFrameRate();
-    sprite.update(dt);
+    img.update(dt);
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    sprite.draw();
+    img.draw();
 }
 
 //--------------------------------------------------------------
