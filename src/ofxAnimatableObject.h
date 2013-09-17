@@ -20,6 +20,7 @@ public:
         color.setColor(ofColor(255));
         position.setPosition(ofPoint(0.,0.,0.));
         rotation.setPosition(ofPoint(0.,0.,0.));
+		anchor.set(0,0);
     }
     
     ~ofxAnimatableObject(){};
@@ -63,7 +64,20 @@ public:
     bool isOrWillBeAnimating(){
         return (position.isOrWillBeAnimating() || size.isOrWillBeAnimating() || color.isOrWillBeAnimating() || rotation.isOrWillBeAnimating());
     }
-    
+
+	void setAnchorPercent(float xPct,float yPct){
+		T::setAnchorPercent(xPct,yPct);
+		anchor.set(xPct,yPct);
+	}
+
+	bool inside(ofPoint p){
+		int width=T::getWidth();
+		int height=T::getHeight();
+		ofRectangle rect(position.getCurrentPosition()-anchor*ofPoint(width,height),width,height);
+		return rect.inside(p);
+	}
+
+    ofVec2f					anchor;
     ofxAnimatableFloat      size;
     ofxAnimatableOfColor	color;
     ofxAnimatableOfPoint	position;
@@ -79,6 +93,7 @@ public:
         color.setColor(ofColor(255));
         position.setPosition(ofPoint(0.,0.,0.));
         rotation.setPosition(ofPoint(0.,0.,0.));
+		anchor.set(0,0);
     }
     
     ~ofxAnimatableObject(){};
@@ -126,7 +141,21 @@ public:
     bool isOrWillBeAnimating(){
         return (position.isOrWillBeAnimating() || size.isOrWillBeAnimating() || color.isOrWillBeAnimating() || rotation.isOrWillBeAnimating());
     }
+	
+	void setAnchorPercent(float xPct,float yPct){
+		_ptr->setAnchorPercent(xPct,yPct);
+		anchor.set(xPct,yPct);
+	}
+
+	bool inside(ofPoint p){
+		int width=_ptr->getWidth();
+		int height=_ptr->getHeight();
+		ofRectangle rect(position.getCurrentPosition()-anchor*ofPoint(width,height),width,height);
+		return rect.inside(p);
+	}
+
     T *                     _ptr;
+	ofVec2f					anchor;
     ofxAnimatableFloat      size;
     ofxAnimatableOfColor	color;
     ofxAnimatableOfPoint	position;
@@ -142,6 +171,7 @@ public:
         color.setColor(ofColor(255));
         position.setPosition(ofPoint(0.,0.,0.));
         rotation.setPosition(ofPoint(0.,0.,0.));
+		anchor.set(0,0);
     }
     
     ~ofxAnimatableObject(){};
@@ -184,7 +214,20 @@ public:
     bool isOrWillBeAnimating(){
         return (position.isOrWillBeAnimating() || size.isOrWillBeAnimating() || color.isOrWillBeAnimating() || rotation.isOrWillBeAnimating());
     }
+
+	void setAnchorPercent(float xPct,float yPct){
+		ofImage::setAnchorPercent(xPct,yPct);
+		anchor.set(xPct,yPct);
+	}
+
+	bool inside(ofPoint p){
+		int width=ofImage::getWidth();
+		int height=ofImage::getHeight();
+		ofRectangle rect(position.getCurrentPosition()-anchor*ofPoint(width,height),width,height);
+		return rect.inside(p);
+	}
     
+	ofVec2f					anchor;
     ofxAnimatableFloat      size;
     ofxAnimatableOfColor	color;
     ofxAnimatableOfPoint	position;
@@ -200,6 +243,7 @@ public:
         color.setColor(ofColor(255));
         position.setPosition(ofPoint(0.,0.,0.));
         rotation.setPosition(ofPoint(0.,0.,0.));
+		anchor.set(0,0);
     }
     
     ~ofxAnimatableObject(){};
@@ -246,7 +290,21 @@ public:
     bool isOrWillBeAnimating(){
         return (position.isOrWillBeAnimating() || size.isOrWillBeAnimating() || color.isOrWillBeAnimating() || rotation.isOrWillBeAnimating());
     }
+
+	void setAnchorPercent(float xPct,float yPct){
+		_ptr->setAnchorPercent(xPct,yPct);
+		anchor.set(xPct,yPct);
+	}
+
+	bool inside(ofPoint p){
+		int width=_ptr->getWidth();
+		int height=_ptr->getHeight();
+		ofRectangle rect(position.getCurrentPosition()-anchor*ofPoint(width,height),width,height);
+		return rect.inside(p);
+	}
+
     ofImage *               _ptr;
+	ofVec2f					anchor;
     ofxAnimatableFloat      size;
     ofxAnimatableOfColor	color;
     ofxAnimatableOfPoint	position;
