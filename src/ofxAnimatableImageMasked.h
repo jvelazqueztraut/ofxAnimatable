@@ -12,9 +12,12 @@
 #include "ofxAnimatableFloat.h"
 
 enum MaskType{
-    RECT=0,
+    RECTANGULAR=0,
     CIRCULAR,
     DIAGONAL,
+    ARROW,
+    MULTI_ARROW,
+    RECTANGLES,
 };
 
 class ofxAnimatableImageMasked : public ofxAnimatableObject<ofFbo> {
@@ -61,6 +64,7 @@ public:
         
         mask.update(dt);
         
+        ofPushStyle();
         if(mask.val()==1.){
             ofFbo::begin();
                 ofSetColor(255);
@@ -76,7 +80,7 @@ public:
         
                     ofSetColor(255);
                     switch(type){
-                        case RECT:
+                        case RECTANGULAR:
                             ofRect(0,0,width*mask.val(),height);
                             break;
                         case CIRCULAR:
@@ -91,6 +95,87 @@ public:
                                 ofVertex(0,height);
                             ofEndShape();
                             break;
+                        case ARROW:
+                            ofSetPolyMode(OF_POLY_WINDING_ODD);	// this is the normal mode
+                            ofBeginShape();
+                            ofVertex(0,0);
+                            ofVertex((width+height*0.5)*mask.val()-height*0.5,0);
+                            ofVertex((width+height*0.5)*mask.val(),height*0.5);
+                            ofVertex((width+height*0.5)*mask.val()-height*0.5,height);
+                            ofVertex(0,height);
+                            ofEndShape();
+                            break;
+                        case MULTI_ARROW:
+                            ofSetPolyMode(OF_POLY_WINDING_ODD);	// this is the normal mode
+                            ofBeginShape();
+                            ofVertex(0,0);
+                            ofVertex((width+height*1.75)*mask.val()-height*1.75,0);
+                            ofVertex((width+height*1.75)*mask.val()-height*1.25,height*0.5);
+                            ofVertex((width+height*1.75)*mask.val()-height*1.75,height);
+                            ofVertex(0,height);
+                            ofEndShape();
+                            ofBeginShape();
+                            ofVertex((width+height*1.75)*mask.val()-height,0);
+                            ofVertex((width+height*1.75)*mask.val()-height*0.5,0);
+                            ofVertex((width+height*1.75)*mask.val(),height*0.5);
+                            ofVertex((width+height*1.75)*mask.val()-height*0.5,height);
+                            ofVertex((width+height*1.75)*mask.val()-height,height);
+                            ofVertex((width+height*1.75)*mask.val()-height*0.5,height*0.5);
+                            ofEndShape();
+                            break;
+                        case RECTANGLES:
+                            ofPushStyle();
+                            ofSetRectMode(OF_RECTMODE_CENTER);
+                            if(mask.val()){
+                                if(mask.val()/0.5<1.){
+                                    ofRect(width/6.,height/4.,width/3.*mask.val()/0.5,height/2.*mask.val()/0.5);
+                                }
+                                else{
+                                    ofRect(width/6.,height/4.,width/3.,height/2.);
+                                }
+                            }
+                            if((mask.val()-0.1)>0.){
+                                if((mask.val()-0.1)/0.5<1.){
+                                    ofRect(width/6.,3.*height/4.,width/3.*(mask.val()-0.1)/0.5,height/2.*(mask.val()-0.1)/0.5);
+                                }
+                                else{
+                                    ofRect(width/6.,3.*height/4.,width/3.,height/2.);
+                                }
+                            }
+                            if((mask.val()-0.2)>0.){
+                                if((mask.val()-0.2)/0.5<1.){
+                                    ofRect(3.*width/6.,height/4.,width/3.*(mask.val()-0.2)/0.5,height/2.*(mask.val()-0.2)/0.5);
+                                }
+                                else{
+                                    ofRect(3.*width/6.,height/4.,width/3.,height/2.);
+                                }
+                            }
+                            if((mask.val()-0.3)>0.){
+                                if((mask.val()-0.3)/0.5<1.){
+                                    ofRect(3.*width/6.,3.*height/4.,width/3.*(mask.val()-0.3)/0.5,height/2.*(mask.val()-0.3)/0.5);
+                                }
+                                else{
+                                    ofRect(3.*width/6.,3.*height/4.,width/3.,height/2.);
+                                }
+                            }
+                            if((mask.val()-0.4)>0.){
+                                if((mask.val()-0.4)/0.5<1.){
+                                    ofRect(5.*width/6.,height/4.,width/3.*(mask.val()-0.4)/0.5,height/2.*(mask.val()-0.4)/0.5);
+                                }
+                                else{
+                                    ofRect(5.*width/6.,height/4.,width/3.,height/2.);
+                                }
+                            }
+                            if((mask.val()-0.5)>0.){
+                                if((mask.val()-0.5)/0.5<1.){
+                                    ofRect(5.*width/6.,3.*height/4.,width/3.*(mask.val()-0.5)/0.5,height/2.*(mask.val()-0.5)/0.5);
+                                }
+                                else{
+                                    ofRect(5.*width/6.,3.*height/4.,width/3.,height/2.);
+                                }
+                            }
+                            ofPopStyle();
+                            break;
                         //VARIOS RECTANGULOS
                         //
                     }
@@ -98,6 +183,7 @@ public:
                 shader.end();
             ofFbo::end();
         }
+        ofPopStyle();
     }
     
     bool isOrWillBeAnimating(){
