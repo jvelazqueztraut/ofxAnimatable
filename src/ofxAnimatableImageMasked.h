@@ -20,6 +20,11 @@ enum MaskType{
     RECTANGLES,
 };
 
+#define RECTANGLES_X 5
+#define RECTANGLES_Y 3
+#define RECTANGLES_DELAY 0.05
+#define RECTANGLES_TIME 0.2
+
 class ofxAnimatableImageMasked : public ofxAnimatableObject<ofFbo> {
 public:
     ofxAnimatableImageMasked() : ofxAnimatableObject<ofFbo>(){
@@ -126,58 +131,20 @@ public:
                         case RECTANGLES:
                             ofPushStyle();
                             ofSetRectMode(OF_RECTMODE_CENTER);
-                            if(mask.val()){
-                                if(mask.val()/0.5<1.){
-                                    ofRect(width/6.,height/4.,width/3.*mask.val()/0.5,height/2.*mask.val()/0.5);
-                                }
-                                else{
-                                    ofRect(width/6.,height/4.,width/3.,height/2.);
-                                }
-                            }
-                            if((mask.val()-0.1)>0.){
-                                if((mask.val()-0.1)/0.5<1.){
-                                    ofRect(width/6.,3.*height/4.,width/3.*(mask.val()-0.1)/0.5,height/2.*(mask.val()-0.1)/0.5);
-                                }
-                                else{
-                                    ofRect(width/6.,3.*height/4.,width/3.,height/2.);
-                                }
-                            }
-                            if((mask.val()-0.2)>0.){
-                                if((mask.val()-0.2)/0.5<1.){
-                                    ofRect(3.*width/6.,height/4.,width/3.*(mask.val()-0.2)/0.5,height/2.*(mask.val()-0.2)/0.5);
-                                }
-                                else{
-                                    ofRect(3.*width/6.,height/4.,width/3.,height/2.);
-                                }
-                            }
-                            if((mask.val()-0.3)>0.){
-                                if((mask.val()-0.3)/0.5<1.){
-                                    ofRect(3.*width/6.,3.*height/4.,width/3.*(mask.val()-0.3)/0.5,height/2.*(mask.val()-0.3)/0.5);
-                                }
-                                else{
-                                    ofRect(3.*width/6.,3.*height/4.,width/3.,height/2.);
-                                }
-                            }
-                            if((mask.val()-0.4)>0.){
-                                if((mask.val()-0.4)/0.5<1.){
-                                    ofRect(5.*width/6.,height/4.,width/3.*(mask.val()-0.4)/0.5,height/2.*(mask.val()-0.4)/0.5);
-                                }
-                                else{
-                                    ofRect(5.*width/6.,height/4.,width/3.,height/2.);
-                                }
-                            }
-                            if((mask.val()-0.5)>0.){
-                                if((mask.val()-0.5)/0.5<1.){
-                                    ofRect(5.*width/6.,3.*height/4.,width/3.*(mask.val()-0.5)/0.5,height/2.*(mask.val()-0.5)/0.5);
-                                }
-                                else{
-                                    ofRect(5.*width/6.,3.*height/4.,width/3.,height/2.);
+                            for(int x=0;x<RECTANGLES_X;x++){
+                                for(int y=0;y<RECTANGLES_Y;y++){
+                                    if(mask.val()>(x*RECTANGLES_Y+y)*RECTANGLES_DELAY){
+                                        if((mask.val()-(x*RECTANGLES_Y+y)*RECTANGLES_DELAY)/RECTANGLES_TIME<1.){
+                                            ofRect((x*2+1)*width/(RECTANGLES_X*2),(y*2+1)*height/(RECTANGLES_Y*2),width/(RECTANGLES_X)*(mask.val()-(x*RECTANGLES_Y+y)*RECTANGLES_DELAY)/RECTANGLES_TIME,height/(RECTANGLES_Y)*(mask.val()-(x*RECTANGLES_Y+y)*RECTANGLES_DELAY)/RECTANGLES_TIME);
+                                        }
+                                        else{
+                                            ofRect((x*2+1)*width/(RECTANGLES_X*2),(y*2+1)*height/(RECTANGLES_Y*2),width/RECTANGLES_X,height/RECTANGLES_Y);
+                                        }
+                                    }
                                 }
                             }
                             ofPopStyle();
                             break;
-                        //VARIOS RECTANGULOS
-                        //
                     }
         
                 shader.end();
