@@ -3,6 +3,7 @@
 #include "ofMain.h"
 
 #include "ofxAnimatableObject.h"
+#include "ofxAnimatableImageMasked.h"
 
 class testApp : public ofBaseApp{
 
@@ -22,5 +23,7 @@ class testApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
     
     ofxAnimatableObject<ofImage> img;
+    
+    ofxAnimatableImageMasked imgMasked;
 		
 };

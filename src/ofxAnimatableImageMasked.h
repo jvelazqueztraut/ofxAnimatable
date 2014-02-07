@@ -13,7 +13,7 @@
 
 enum MaskType{
     RECT=0,
-    CIRCLE,
+    CIRCULAR,
     DIAGONAL,
 };
 
@@ -79,8 +79,8 @@ public:
                         case RECT:
                             ofRect(0,0,width*mask.val(),height);
                             break;
-                        case CIRCLE:
-                            ofCircle(width*0.5,height*0.5,radius*mask.val());
+                        case CIRCULAR:
+                            ofCircle(width*anchor.x,height*anchor.y,radius*mask.val());
                             break;
                         case DIAGONAL:
                             ofSetPolyMode(OF_POLY_WINDING_ODD);	// this is the normal mode
