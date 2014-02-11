@@ -29,47 +29,50 @@ class ofxAnimatableImageMasked : public ofxAnimatableObject<ofFbo> {
 public:
     ofxAnimatableImageMasked() : ofxAnimatableObject<ofFbo>(){
         string shaderProgram =
-		"uniform sampler2DRect tex;\
-		\
-		void main (void){\
-        vec2 pos = gl_FragCoord.xy;\
-		vec4 color = texture2DRect(tex,pos);\
-		gl_FragColor = color;\
+		"#extension GL_ARB_texture_rectangle: enable\n\
+		\n\
+		uniform sampler2DRect tex;\n\
+		\n\
+		void main (void){\n\
+        vec2 pos = gl_FragCoord.xy;\n\
+		vec4 color = texture2DRect(tex,pos);\n\
+		gl_FragColor = color;\n\
 		}";
 
 		shader.setupShaderFromSource(GL_FRAGMENT_SHADER, shaderProgram);
 		shader.linkProgram();
-        
+
         mask.reset(1.);
-        
+
         type = DIAGONAL;
     }
-    
+
     ~ofxAnimatableImageMasked(){};
-    
+
     void loadImage(string path){
         ofPixels image;
         ofLoadImage(image, path);
-        
+
         width = image.getWidth();
         height = image.getHeight();
-        
+
         ofFbo::allocate(width,height,GL_RGBA);
         tex.loadData(image);
-        
+
         radius = 0.5 * sqrt( width*width + height*height );
     }
-    
+
     void update(float dt){
-        
+
         size.update(dt);
         color.update(dt);
         position.update(dt);
         rotation.update(dt);
-        
+
         mask.update(dt);
-        
+
         ofPushStyle();
+        ofFill();
         if(mask.val()==1.){
             ofFbo::begin();
                 ofSetColor(255);
@@ -79,10 +82,10 @@ public:
         else{
             ofFbo::begin();
                 ofClear(0,0);
-        
+
                 shader.begin();
                 shader.setUniformTexture("tex",tex,1);
-        
+
                     ofSetColor(255);
                     switch(type){
                         case RECTANGULAR:
@@ -146,23 +149,23 @@ public:
                             ofPopStyle();
                             break;
                     }
-        
+
                 shader.end();
             ofFbo::end();
         }
         ofPopStyle();
     }
-    
+
     bool isOrWillBeAnimating(){
         return (mask.isOrWillBeAnimating() || ofxAnimatableObject<ofFbo>::isOrWillBeAnimating());
     }
-    
+
     void setMask(float m){mask.reset(m);}
-    
+
     void setMaskType(MaskType t){
         type=t;
     }
-    
+
     ofxAnimatableFloat mask;
 private:
     ofTexture tex;
