@@ -18,6 +18,8 @@ enum MaskType{
     ARROW,
     MULTI_ARROW,
     RECTANGLES,
+    HORIZONTAL,
+    VERTICAL
 };
 
 #define RECTANGLES_X 5
@@ -72,6 +74,7 @@ public:
         mask.update(dt);
 
         ofPushStyle();
+        ofPushMatrix();
         ofFill();
         if(mask.val()==1.){
             ofFbo::begin();
@@ -82,19 +85,23 @@ public:
         else{
             ofFbo::begin();
                 ofClear(0,0);
-
-                shader.begin();
-                shader.setUniformTexture("tex",tex,1);
-
-                    ofSetColor(255);
-                    switch(type){
-                        case RECTANGULAR:
+                ofSetColor(255);
+                switch(type){
+                    case RECTANGULAR:
+                        shader.begin();
+                        shader.setUniformTexture("tex",tex,1);
                             ofRect(0,0,width*mask.val(),height);
-                            break;
-                        case CIRCULAR:
+                        shader.end();
+                        break;
+                    case CIRCULAR:
+                        shader.begin();
+                        shader.setUniformTexture("tex",tex,1);
                             ofCircle(width*anchor.x,height*anchor.y,radius*mask.val());
-                            break;
-                        case DIAGONAL:
+                        shader.end();
+                        break;
+                    case DIAGONAL:
+                        shader.begin();
+                        shader.setUniformTexture("tex",tex,1);
                             ofSetPolyMode(OF_POLY_WINDING_ODD);	// this is the normal mode
                             ofBeginShape();
                                 ofVertex(0,0);
@@ -102,8 +109,11 @@ public:
                                 ofVertex((width+height)*mask.val()-height,height);
                                 ofVertex(0,height);
                             ofEndShape();
-                            break;
-                        case ARROW:
+                        shader.end();
+                        break;
+                    case ARROW:
+                        shader.begin();
+                        shader.setUniformTexture("tex",tex,1);
                             ofSetPolyMode(OF_POLY_WINDING_ODD);	// this is the normal mode
                             ofBeginShape();
                             ofVertex(0,0);
@@ -112,8 +122,11 @@ public:
                             ofVertex((width+height*0.5)*mask.val()-height*0.5,height);
                             ofVertex(0,height);
                             ofEndShape();
-                            break;
-                        case MULTI_ARROW:
+                        shader.end();
+                        break;
+                    case MULTI_ARROW:
+                        shader.begin();
+                        shader.setUniformTexture("tex",tex,1);
                             ofSetPolyMode(OF_POLY_WINDING_ODD);	// this is the normal mode
                             ofBeginShape();
                             ofVertex(0,0);
@@ -130,9 +143,11 @@ public:
                             ofVertex((width+height*1.75)*mask.val()-height,height);
                             ofVertex((width+height*1.75)*mask.val()-height*0.5,height*0.5);
                             ofEndShape();
-                            break;
-                        case RECTANGLES:
-                            ofPushStyle();
+                        shader.end();
+                        break;
+                    case RECTANGLES:
+                        shader.begin();
+                        shader.setUniformTexture("tex",tex,1);
                             ofSetRectMode(OF_RECTMODE_CENTER);
                             for(int x=0;x<RECTANGLES_X;x++){
                                 for(int y=0;y<RECTANGLES_Y;y++){
@@ -146,13 +161,21 @@ public:
                                     }
                                 }
                             }
-                            ofPopStyle();
-                            break;
-                    }
+                        shader.end();
+                        break;
+                    case HORIZONTAL:
+                        ofTranslate(width-mask.val()*width,0);
+                        tex.draw(0,0);
+                        break;
+                    case VERTICAL:
+                        ofTranslate(0,height-mask.val()*height);
+                        tex.draw(0,0);
+                        break;
+                }
 
-                shader.end();
             ofFbo::end();
         }
+        ofPopMatrix();
         ofPopStyle();
     }
 
