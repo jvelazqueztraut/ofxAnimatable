@@ -163,7 +163,7 @@ public:
     
 };
 
-template <class T>
+template <>
 class ofxAnimatableObject<ofImage> : public ofImage {
 public:
     ofxAnimatableObject() : ofImage(){
