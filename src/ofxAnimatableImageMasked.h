@@ -47,6 +47,8 @@ public:
         mask.reset(1.);
 
         type = DIAGONAL;
+        
+        hasAux = false;
     }
 
     ~ofxAnimatableImageMasked(){};
@@ -86,6 +88,9 @@ public:
             ofFbo::begin();
                 ofClear(0,0);
                 ofSetColor(255);
+                if(hasAux){
+                    aux.draw(0,0);
+                }
                 switch(type){
                     case RECTANGULAR:
                         shader.begin();
@@ -188,6 +193,14 @@ public:
     void setMaskType(MaskType t){
         type=t;
     }
+    
+    void loadAuxImage(string path){
+        ofPixels image;
+        ofLoadImage(image, path);
+        
+        aux.loadData(image);
+        hasAux = true;
+    }
 
     ofxAnimatableFloat mask;
 private:
@@ -197,4 +210,7 @@ private:
     float width;
     float height;
     float radius;
+    
+    ofTexture aux;
+    bool hasAux;
 };
