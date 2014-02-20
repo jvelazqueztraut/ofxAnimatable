@@ -12,7 +12,8 @@ void testApp::setup(){
     img.position.setDuration(2.);
     img.position.animateTo(ofPoint(768,196));
     
-    imgMasked.loadImage("Front.png");
+    imgMasked.tex.loadImage("Argentina.png");
+    imgMasked.allocate();
     imgMasked.setAnchorPercent(0.5,0.5);
     imgMasked.setPosition(512,512);
     imgMasked.setMaskType(RECTANGLES);

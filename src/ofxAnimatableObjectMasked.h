@@ -73,22 +73,20 @@ public:
         ofPushStyle();
         ofPushMatrix();
         ofFill();
-        ofEnableAlphaBlending();
+        ofFbo::begin();
+        glEnable(GL_BLEND);
         glBlendFuncSeparate(GL_ONE, GL_SRC_COLOR, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+        ofClear(0,0);
+        ofSetColor(255);
+        
+        if(aux.isAllocated()){
+            aux.draw(0,0);
+        }
+
         if(mask.val()==1.){
-            ofFbo::begin();
-            ofClear(0,0);
-            ofSetColor(255);
             tex.draw(0,0);
-            ofFbo::end();
         }
         else{
-            ofFbo::begin();
-            ofClear(0,0);
-            ofSetColor(255);
-            if(aux.isAllocated()){
-                aux.draw(0,0);
-            }
             switch(type){
                 case RECTANGULAR:
                     shader.begin();
@@ -175,9 +173,8 @@ public:
                     tex.draw(0,0);
                     break;
             }
-            
-            ofFbo::end();
         }
+        ofFbo::end();
         ofPopMatrix();
         ofPopStyle();
     }
