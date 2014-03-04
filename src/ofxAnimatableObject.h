@@ -75,6 +75,14 @@ public:
     bool isOrWillBeAnimating(){
         return (position.isOrWillBeAnimating() || size.isOrWillBeAnimating() || color.isOrWillBeAnimating() || rotation.isOrWillBeAnimating());
     }
+    
+    float getWidth(){
+        return T::getWidth();
+    }
+    
+    float getHeight(){
+        return T::getHeight();
+    }
 
 	void setAnchorPercent(float xPct,float yPct){
 		T::setAnchorPercent(xPct,yPct);
@@ -87,6 +95,10 @@ public:
 		ofRectangle rect(position.getCurrentPosition()-anchor*ofPoint(width,height),width,height);
 		return rect.inside(p);
 	}
+    
+    ofPoint getInsidePos(ofPoint p){
+        return (p - position.getCurrentPosition())/size.val();
+    }
 
     ofVec2f					anchor;
     ofxAnimatableFloat      size;
@@ -151,6 +163,14 @@ public:
     bool isOrWillBeAnimating(){
         return (position.isOrWillBeAnimating() || size.isOrWillBeAnimating() || color.isOrWillBeAnimating() || rotation.isOrWillBeAnimating());
     }
+    
+    float getWidth(){
+        return _ptr->getWidth();
+    }
+    
+    float getHeight(){
+        return _ptr->getHeight();
+    }
 	
 	void setAnchorPercent(float xPct,float yPct){
 		_ptr->setAnchorPercent(xPct,yPct);
@@ -163,7 +183,10 @@ public:
 		ofRectangle rect(position.getCurrentPosition()-anchor*ofPoint(width,height),width,height);
 		return rect.inside(p);
 	}
-
+    
+    ofPoint getInsidePos(ofPoint p){
+        return (p - position.getCurrentPosition())/size.val();
+    }
 
     T *                     _ptr;
 	ofVec2f					anchor;
