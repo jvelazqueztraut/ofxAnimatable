@@ -14,6 +14,7 @@
 enum MaskType{
     RECTANGULAR=0,
     CIRCULAR,
+    RADIAL,
     DIAGONAL,
     ARROW,
     MULTI_ARROW,
@@ -21,15 +22,59 @@ enum MaskType{
     HORIZONTAL,
     VERTICAL
 };
-
 #define RECTANGLES_X 5
 #define RECTANGLES_Y 3
 #define RECTANGLES_DELAY 0.05
 #define RECTANGLES_TIME 0.2
+
+#define RADIAL_EPSILON 1
+
 template <class T>
-class ofxAnimatableObjectMasked : public ofxAnimatableObject<ofFbo>, public T{
+class ObjectMasked : public T{
 public:
-    ofxAnimatableObjectMasked() : ofxAnimatableObject<ofFbo>() , T(){
+    ObjectMasked() : T(){
+        mask.reset(1.);
+        type = RECTANGULAR;
+    };
+    ~ObjectMasked(){};
+    
+    ofTexture& getTextureReference(){
+        return (T::getTextureReference());
+    }
+    
+    void setMask(float m){mask.reset(m);}
+    
+    void setMaskType(MaskType t){type=t;}
+    
+    ofxAnimatableFloat mask;
+    MaskType type;
+};
+
+template <>
+class ObjectMasked<ofTexture> : public ofTexture{
+public:
+    ObjectMasked<ofTexture>() : ofTexture(){
+        mask.reset(1.);
+        type = RECTANGULAR;
+    };
+    ~ObjectMasked<ofTexture>(){};
+    
+    ofTexture& getTextureReference(){
+        return ((ofTexture&) *this);
+    }
+    
+    void setMask(float m){mask.reset(m);}
+    
+    void setMaskType(MaskType t){type=t;}
+    
+    ofxAnimatableFloat mask;
+    MaskType type;
+};
+
+template <class T, int N=0>
+class ofxAnimatableObjectMasked : public ofxAnimatableObject<ofFbo>, public ObjectMasked<T>{
+public:
+    ofxAnimatableObjectMasked() : ofxAnimatableObject<ofFbo>() , ObjectMasked<T>(){
         string shaderProgram =
 		"#extension GL_ARB_texture_rectangle: enable\n\
 		\n\
@@ -43,12 +88,8 @@ public:
         
 		shader.setupShaderFromSource(GL_FRAGMENT_SHADER, shaderProgram);
 		shader.linkProgram();
-        
-        mask.reset(1.);
-        
+            
         width = height = 0;
-        
-        type = DIAGONAL;
     }
     
     ~ofxAnimatableObjectMasked(){};
@@ -69,12 +110,14 @@ public:
         
         ofxAnimatableObject<ofFbo>::update(dt);
         
-        mask.update(dt);
-
-        updateFbo();
-    }
-    
-    void updateFbo(){
+        ObjectMasked<T>::mask.update(dt);
+        
+        if(N>0){
+            for(int i=0;i<N;i++){
+                aux[i].mask.update(dt);
+            }
+        }
+        
         ofPushStyle();
         ofPushMatrix();
         ofFill();
@@ -84,104 +127,126 @@ public:
         ofClear(0,0);
         ofSetColor(255);
         
-        if(aux.isAllocated()){
-            aux.draw(0,0);
-        }
-        
-        if(mask.val()==1.){
-            T::draw(0,0);
-        }
-        else{
-            switch(type){
-                case RECTANGULAR:
-                    shader.begin();
-                    shader.setUniformTexture("tex",T::getTextureReference(),0);
-                    ofRect(0,0,width*mask.val(),height);
-                    shader.end();
-                    break;
-                case CIRCULAR:
-                    shader.begin();
-                    shader.setUniformTexture("tex",T::getTextureReference(),0);
-                    ofCircle(width*this->anchor.x,height*this->anchor.y,radius*mask.val());
-                    shader.end();
-                    break;
-                case DIAGONAL:
-                    shader.begin();
-                    shader.setUniformTexture("tex",T::getTextureReference(),0);
-                    ofSetPolyMode(OF_POLY_WINDING_ODD);	// this is the normal mode
-                    ofBeginShape();
-                    ofVertex(0,0);
-                    ofVertex((width+height)*mask.val(),0);
-                    ofVertex((width+height)*mask.val()-height,height);
-                    ofVertex(0,height);
-                    ofEndShape();
-                    shader.end();
-                    break;
-                case ARROW:
-                    shader.begin();
-                    shader.setUniformTexture("tex",T::getTextureReference(),0);
-                    ofSetPolyMode(OF_POLY_WINDING_ODD);	// this is the normal mode
-                    ofBeginShape();
-                    ofVertex(0,0);
-                    ofVertex((width+height*0.5)*mask.val()-height*0.5,0);
-                    ofVertex((width+height*0.5)*mask.val(),height*0.5);
-                    ofVertex((width+height*0.5)*mask.val()-height*0.5,height);
-                    ofVertex(0,height);
-                    ofEndShape();
-                    shader.end();
-                    break;
-                case MULTI_ARROW:
-                    shader.begin();
-                    shader.setUniformTexture("tex",T::getTextureReference(),0);
-                    ofSetPolyMode(OF_POLY_WINDING_ODD);	// this is the normal mode
-                    ofBeginShape();
-                    ofVertex(0,0);
-                    ofVertex((width+height*1.75)*mask.val()-height*1.75,0);
-                    ofVertex((width+height*1.75)*mask.val()-height*1.25,height*0.5);
-                    ofVertex((width+height*1.75)*mask.val()-height*1.75,height);
-                    ofVertex(0,height);
-                    ofEndShape();
-                    ofBeginShape();
-                    ofVertex((width+height*1.75)*mask.val()-height,0);
-                    ofVertex((width+height*1.75)*mask.val()-height*0.5,0);
-                    ofVertex((width+height*1.75)*mask.val(),height*0.5);
-                    ofVertex((width+height*1.75)*mask.val()-height*0.5,height);
-                    ofVertex((width+height*1.75)*mask.val()-height,height);
-                    ofVertex((width+height*1.75)*mask.val()-height*0.5,height*0.5);
-                    ofEndShape();
-                    shader.end();
-                    break;
-                case RECTANGLES:
-                    shader.begin();
-                    shader.setUniformTexture("tex",T::getTextureReference(),0);
-                    ofSetRectMode(OF_RECTMODE_CENTER);
-                    for(int x=0;x<RECTANGLES_X;x++){
-                        for(int y=0;y<RECTANGLES_Y;y++){
-                            if(mask.val()>(x*RECTANGLES_Y+y)*RECTANGLES_DELAY){
-                                if((mask.val()-(x*RECTANGLES_Y+y)*RECTANGLES_DELAY)/RECTANGLES_TIME<1.){
-                                    ofRect((x*2+1)*width/(RECTANGLES_X*2),(y*2+1)*height/(RECTANGLES_Y*2),width/(RECTANGLES_X)*(mask.val()-(x*RECTANGLES_Y+y)*RECTANGLES_DELAY)/RECTANGLES_TIME,height/(RECTANGLES_Y)*(mask.val()-(x*RECTANGLES_Y+y)*RECTANGLES_DELAY)/RECTANGLES_TIME);
-                                }
-                                else{
-                                    ofRect((x*2+1)*width/(RECTANGLES_X*2),(y*2+1)*height/(RECTANGLES_Y*2),width/RECTANGLES_X,height/RECTANGLES_Y);
-                                }
-                            }
-                        }
+        if(N>0){
+            for(int i=(N-1);i>=0;i--){
+                if(aux[i].isAllocated()){
+                    if(aux[i].mask.val()==1.){
+                        aux[i].draw(0,0);
                     }
-                    shader.end();
-                    break;
-                case HORIZONTAL:
-                    ofTranslate(width-mask.val()*width,0);
-                    T::draw(0,0);
-                    break;
-                case VERTICAL:
-                    ofTranslate(0,height-mask.val()*height);
-                    T::draw(0,0);
-                    break;
+                    else if(aux[i].mask.val()){
+                        updateFbo(aux[i].getTextureReference(),aux[i].mask.val(),aux[i].type);
+                    }
+                }
             }
         }
+        
+        if(ObjectMasked<T>::mask.val()==1.){
+            T::draw(0,0);
+        }
+        else if(ObjectMasked<T>::mask.val()){
+            updateFbo(ObjectMasked<T>::getTextureReference(),ObjectMasked<T>::mask.val(),ObjectMasked<T>::type);
+        }
+        
         ofxAnimatableObject<ofFbo>::end();
         ofPopMatrix();
         ofPopStyle();
+    }
+    
+    void updateFbo(ofTexture& tex, float m, MaskType t){
+        switch(t){
+            case RECTANGULAR:
+                shader.begin();
+                shader.setUniformTexture("tex",tex,0);
+                ofRect(0,0,width*m,height);
+                shader.end();
+                break;
+            case CIRCULAR:
+                shader.begin();
+                shader.setUniformTexture("tex",tex,0);
+                ofCircle(width*ofxAnimatableObject<ofFbo>::anchor.x,height*ofxAnimatableObject<ofFbo>::anchor.y,radius*m);
+                shader.end();
+                break;
+            case RADIAL:
+                shader.begin();
+                shader.setUniformTexture("tex",tex,0);
+                p.clear();
+                p.arc(0, 0, radius, radius, 0, RADIAL_EPSILON + (360-RADIAL_EPSILON)*m);
+                p.draw(width*ofxAnimatableObject<ofFbo>::anchor.x,height*ofxAnimatableObject<ofFbo>::anchor.y);
+                shader.end();
+                break;
+            case DIAGONAL:
+                shader.begin();
+                shader.setUniformTexture("tex",tex,0);
+                ofSetPolyMode(OF_POLY_WINDING_ODD);	// this is the normal mode
+                ofBeginShape();
+                ofVertex(0,0);
+                ofVertex((width+height)*m,0);
+                ofVertex((width+height)*m-height,height);
+                ofVertex(0,height);
+                ofEndShape();
+                shader.end();
+                break;
+            case ARROW:
+                shader.begin();
+                shader.setUniformTexture("tex",tex,0);
+                ofSetPolyMode(OF_POLY_WINDING_ODD);	// this is the normal mode
+                ofBeginShape();
+                ofVertex(0,0);
+                ofVertex((width+height*0.5)*m-height*0.5,0);
+                ofVertex((width+height*0.5)*m,height*0.5);
+                ofVertex((width+height*0.5)*m-height*0.5,height);
+                ofVertex(0,height);
+                ofEndShape();
+                shader.end();
+                break;
+            case MULTI_ARROW:
+                shader.begin();
+                shader.setUniformTexture("tex",tex,0);
+                ofSetPolyMode(OF_POLY_WINDING_ODD);	// this is the normal mode
+                ofBeginShape();
+                ofVertex(0,0);
+                ofVertex((width+height*1.75)*m-height*1.75,0);
+                ofVertex((width+height*1.75)*m-height*1.25,height*0.5);
+                ofVertex((width+height*1.75)*m-height*1.75,height);
+                ofVertex(0,height);
+                ofEndShape();
+                ofBeginShape();
+                ofVertex((width+height*1.75)*m-height,0);
+                ofVertex((width+height*1.75)*m-height*0.5,0);
+                ofVertex((width+height*1.75)*m,height*0.5);
+                ofVertex((width+height*1.75)*m-height*0.5,height);
+                ofVertex((width+height*1.75)*m-height,height);
+                ofVertex((width+height*1.75)*m-height*0.5,height*0.5);
+                ofEndShape();
+                shader.end();
+                break;
+            case RECTANGLES:
+                shader.begin();
+                shader.setUniformTexture("tex",tex,0);
+                ofSetRectMode(OF_RECTMODE_CENTER);
+                for(int x=0;x<RECTANGLES_X;x++){
+                    for(int y=0;y<RECTANGLES_Y;y++){
+                        if(m>(x*RECTANGLES_Y+y)*RECTANGLES_DELAY){
+                            if((m-(x*RECTANGLES_Y+y)*RECTANGLES_DELAY)/RECTANGLES_TIME<1.){
+                                ofRect((x*2+1)*width/(RECTANGLES_X*2),(y*2+1)*height/(RECTANGLES_Y*2),width/(RECTANGLES_X)*(m-(x*RECTANGLES_Y+y)*RECTANGLES_DELAY)/RECTANGLES_TIME,height/(RECTANGLES_Y)*(m-(x*RECTANGLES_Y+y)*RECTANGLES_DELAY)/RECTANGLES_TIME);
+                            }
+                            else{
+                                ofRect((x*2+1)*width/(RECTANGLES_X*2),(y*2+1)*height/(RECTANGLES_Y*2),width/RECTANGLES_X,height/RECTANGLES_Y);
+                            }
+                        }
+                    }
+                }
+                shader.end();
+                break;
+            case HORIZONTAL:
+                ofTranslate(width-m*width,0);
+                tex.draw(0,0);
+                break;
+            case VERTICAL:
+                ofTranslate(0,height-m*height);
+                tex.draw(0,0);
+                break;
+        }
     }
     
     void draw(){
@@ -214,21 +279,15 @@ public:
     void setRotation(float x, float y=0., float z=0.){ofxAnimatableObject<ofFbo>::setRotation(ofPoint(x,y,z));}
     
     bool isOrWillBeAnimating(){
-        return (mask.isOrWillBeAnimating() || ofxAnimatableObject<ofFbo>::isOrWillBeAnimating());
+        return (ObjectMasked<T>::mask.isOrWillBeAnimating() || ofxAnimatableObject<ofFbo>::isOrWillBeAnimating());
     }
     
-    void setMask(float m){mask.reset(m);}
-    
-    void setMaskType(MaskType t){
-        type=t;
-    }
-    
-    ofxAnimatableFloat mask;
-    T aux;
+    ObjectMasked<T> aux[N];
 private:
     ofShader shader;
-    MaskType type;
+    ofPath p;
     float width;
     float height;
     float radius;
 };
+

@@ -1,6 +1,7 @@
 # src is the official directory
 !src/
-!example/
+example/*
+!example/src/
 exampleAdvanced/*
 !exampleAdvanced/src/
 

@@ -24,6 +24,6 @@ class testApp : public ofBaseApp{
     
     ofxAnimatableObject<ofImage> img;
     
-    ofxAnimatableObjectMasked<ofImage> imgMasked;
+    ofxAnimatableObjectMasked<ofTexture> imgMasked;
 		
 };

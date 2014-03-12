@@ -310,8 +310,10 @@ float ofxAnimatable::calcCurveAt(float percent, AnimCurve type, float param1, fl
 			r = 1.0f - (percent - 1.0f) * (percent - 1.0f); break;
 
 		case BOUNCY:{
-			float k = 0.5f;
-			r = 0.5f - 0.51f * cosf( M_PI * percent + k * percent - k * 0.5f );
+			//float k = 0.5f;
+			//r = 0.5f - 0.51f * cosf( M_PI * percent + k * percent - k * 0.5f );
+            //0.2 overshoot
+            r = 0.5f - 0.7f * cosf( 4.69197f * percent - 0.77519f );
 			}break;
 
 		case QUADRATIC_BEZIER_PARAM:{
