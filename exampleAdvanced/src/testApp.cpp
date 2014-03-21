@@ -19,6 +19,7 @@ void testApp::setup(){
     imgMasked.setAnchorPercent(0.5,0.5);
     imgMasked.setPosition(512,512);
     imgMasked.setMaskType(RADIAL);
+    imgMasked.setMaskOrientation(false);
     imgMasked.setMask(0.);
     imgMasked.mask.setDuration(2.);
     imgMasked.mask.setRepeatType(LOOP_BACK_AND_FORTH);
@@ -30,6 +31,7 @@ void testApp::update(){
     float dt=1./ofGetFrameRate();
     img.update(dt);
     imgMasked.update(dt);
+    imgMasked.setMaskCenter(ofVec2f((float)ofGetMouseX()/ofGetWidth(),(float)ofGetMouseY()/ofGetHeight()));
 }
 
 //--------------------------------------------------------------
