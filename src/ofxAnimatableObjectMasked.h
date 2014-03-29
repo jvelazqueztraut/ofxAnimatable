@@ -101,14 +101,14 @@ public:
         uniform float height;\n\
         uniform float HH;\n\
         uniform vec2 offset;\n\
+        uniform vec2 limits;\n\
 		uniform sampler2DRect tex;\n\
 		\n\
 		void main (void){\n\
-        vec2 pos = gl_FragCoord.xy;\n\
-        pos.y = HH - pos.y;\n\
-        pos -= offset;\n\
+        vec2 pos = vec2(gl_FragCoord.x,HH-gl_FragCoord.y) - offset;\n\
 		vec4 color = texture2DRect(tex,pos);\n\
-        if(pos.x<0. || pos.x>width || pos.y<0. || pos.y>height){\n\
+        vec2 bounds = vec2(gl_FragCoord.x,HH-gl_FragCoord.y) - limits;\n\
+        if(bounds.x<0. || bounds.x>width || bounds.y<0. || bounds.y>height){\n\
             color = vec4(0.,0.,0.,0.);\n\
         }\n\
 		gl_FragColor = color;\n\
@@ -182,11 +182,11 @@ public:
         ofVec3f offset = (ofPoint(0,0) * reference.getInverse()) * mat;
         
         if(o){
-            if(t==RECTANGULAR_H || t==DIAGONAL || t==ARROW || t==RECTANGLES){
+            if(t==RECTANGULAR_H || t==DIAGONAL || t==ARROW || t==RECTANGLES || t==HORIZONTAL){
                 ofTranslate(width,0);
                 ofScale(-1,1);
             }
-            else if(t==RECTANGULAR_V){
+            else if(t==RECTANGULAR_V || t==VERTICAL){
                 ofTranslate(0,height);
                 ofScale(1,-1);
             }
@@ -195,6 +195,7 @@ public:
         shader.begin();
         shader.setUniformTexture("tex",tex,0);
         shader.setUniform2f("offset",offset.x,offset.y);
+        shader.setUniform2f("limits",offset.x,offset.y);
         shader.setUniform1f("width",width);
         shader.setUniform1f("height",height);
         shader.setUniform1f("HH",ofGetHeight());
@@ -270,22 +271,21 @@ public:
                 break;
             case HORIZONTAL:
                 if(o){
-                    ofTranslate(width-m*width,0);
+                    shader.setUniform2f("offset",offset.x+(1.-m)*width,offset.y);
                 }
                 else{
-                    ofTranslate(m*width-width,0);
+                    shader.setUniform2f("offset",offset.x-(1.-m)*width,offset.y);
                 }
-                shader.setUniform2f("offset",offset.x-m*width,offset.y);
-                tex.draw(0,0);
+                ofRect(0,0,width*m,height);
                 break;
             case VERTICAL:
                 if(o){
-                    ofTranslate(0,height-m*height);
+                    shader.setUniform2f("offset",offset.x,offset.y+(1.-m)*height);
                 }
                 else{
-                    ofTranslate(0,m*height-height);
+                    shader.setUniform2f("offset",offset.x,offset.y-(1.-m)*height);
                 }
-                tex.draw(0,0);
+                ofRect(0,0,width,height*m);
                 break;
         }
         shader.end();

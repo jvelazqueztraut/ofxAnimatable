@@ -19,11 +19,11 @@ void testApp::setup(){
     imgMasked.aux[0].loadData(img);
     imgMasked.setAnchorPercent(0.5,0.5);
     imgMasked.setPosition(512,512);
-    imgMasked.setMaskType(RECTANGULAR_H);
-    //imgMasked.setMaskOrientation(true);
+    imgMasked.setMaskType(HORIZONTAL);
+    imgMasked.setMaskOrientation(false);
     imgMasked.setMask(0.);
-    imgMasked.aux[0].setMaskType(RECTANGULAR_H);
-    //imgMasked.aux[0].setMaskOrientation(false);
+    imgMasked.aux[0].setMaskType(VERTICAL);
+    imgMasked.aux[0].setMaskOrientation(true);
     imgMasked.aux[0].setMask(0.);
     
     //PLAY
