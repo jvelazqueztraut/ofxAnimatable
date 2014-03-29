@@ -150,17 +150,15 @@ public:
 
         if(N>0){
             for(int i=(N-1);i>=0;i--){
-                if(aux[i].isAllocated()){
-                    if(aux[i].mask.val()==1. || ofGetMousePressed()){
-                        aux[i].draw(0,0);
-                    }
-                    else if(aux[i].mask.val()){
-                        updateFbo(aux[i].getTextureReference(),aux[i].mask.val(),aux[i].type,aux[i].orientation,aux[i].center);
-                    }
+                if(aux[i].mask.val()==1.){
+                    aux[i].draw(0,0);
+                }
+                else if(aux[i].mask.val()){
+                    updateFbo(aux[i].getTextureReference(),aux[i].mask.val(),aux[i].type,aux[i].orientation,aux[i].center);
                 }
             }
         }
-        if(ObjectMasked<T>::mask.val()==1. || ofGetMousePressed()){
+        if(ObjectMasked<T>::mask.val()==1.){
             ObjectMasked<T>::draw(0,0);
         }
         else if(ObjectMasked<T>::mask.val()){
@@ -302,7 +300,7 @@ public:
 	}
     
     bool isOrWillBeAnimating(){
-        return (ObjectMasked<T>::mask.isOrWillBeAnimating() || ofxAnimatableObject<ofFbo>::isOrWillBeAnimating());
+        return (ObjectMasked<T>::mask.isOrWillBeAnimating() || ofxAnimatableObject< ObjectMasked<T> >::isOrWillBeAnimating());
     }
     
     ObjectMasked<T> aux[N];
