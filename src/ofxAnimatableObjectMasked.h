@@ -191,60 +191,33 @@ public:
                 ofScale(1,-1);
             }
         }
-
+        
+        shader.begin();
+        shader.setUniformTexture("tex",tex,0);
+        shader.setUniform2f("offset",offset.x,offset.y);
+        shader.setUniform1f("width",width);
+        shader.setUniform1f("height",height);
+        shader.setUniform1f("HH",ofGetHeight());
+        
         switch(t){
-            case RECTANGULAR_H:               
-                shader.begin();
-                shader.setUniformTexture("tex",tex,0);
-                shader.setUniform2f("offset",offset.x,offset.y);
-                shader.setUniform1f("width",width);
-                shader.setUniform1f("height",height);
-                shader.setUniform1f("HH",ofGetHeight());
+            case RECTANGULAR_H:
                 ofRect(0,0,width*m,height);
-                shader.end();
                 break;
             case RECTANGULAR_V:
-                shader.begin();
-                shader.setUniformTexture("tex",tex,0);
-                shader.setUniform2f("offset",offset.x,offset.y);
-                shader.setUniform1f("width",width);
-                shader.setUniform1f("height",height);
-                shader.setUniform1f("HH",ofGetHeight());
                 ofRect(0,0,width,height*m);
-                shader.end();
                 break;
             case CIRCULAR:
-                shader.begin();
-                shader.setUniformTexture("tex",tex,0);
-                shader.setUniform2f("offset",offset.x,offset.y);
-                shader.setUniform1f("width",width);
-                shader.setUniform1f("height",height);
-                shader.setUniform1f("HH",ofGetHeight());
                 ofCircle(width*c.x,height*c.y,RADIUS(width,height,c.x,c.y)*m);
-                shader.end();
                 break;
             case RADIAL:
-                shader.begin();
-                shader.setUniformTexture("tex",tex,0);
-                shader.setUniform2f("offset",offset.x,offset.y);
-                shader.setUniform1f("width",width);
-                shader.setUniform1f("height",height);
-                shader.setUniform1f("HH",ofGetHeight());
                 p.clear();
                 if(o)
                     p.arc(ofPoint(0,0), RADIUS(width,height,c.x,c.y), RADIUS(width,height,c.x,c.y), 360 - (RADIAL_EPSILON + (360-RADIAL_EPSILON)*m), 360);
                 else
                     p.arc(ofPoint(0,0), RADIUS(width,height,c.x,c.y), RADIUS(width,height,c.x,c.y), 0, RADIAL_EPSILON + (360-RADIAL_EPSILON)*m);
                 p.draw(width*c.x,height*c.y);
-                shader.end();
                 break;
             case DIAGONAL:                
-                shader.begin();
-                shader.setUniformTexture("tex",tex,0);
-                shader.setUniform2f("offset",offset.x,offset.y);
-                shader.setUniform1f("width",width);
-                shader.setUniform1f("height",height);
-                shader.setUniform1f("HH",ofGetHeight());
                 ofSetPolyMode(OF_POLY_WINDING_ODD);	// this is the normal mode
                 ofBeginShape();
                     ofVertex(0,0);
@@ -252,16 +225,8 @@ public:
                     ofVertex((width+height)*m-height,height);
                     ofVertex(0,height);
                 ofEndShape();
-                shader.end();
                 break;
             case ARROW:                
-                shader.begin();
-                shader.setUniformTexture("tex",tex,0);
-                shader.setUniform2f("offset",offset.x,offset.y);
-                shader.setUniform1f("width",width);
-                shader.setUniform1f("height",height);
-                shader.setUniform1f("HH",ofGetHeight());
-                ofSetPolyMode(OF_POLY_WINDING_ODD);	// this is the normal mode
                 ofBeginShape();
                     ofVertex(0,0);
                     ofVertex((width+height)*m-height*c.y,0);
@@ -269,17 +234,9 @@ public:
                     ofVertex((width+height)*m-height*(1-c.y),height);
                     ofVertex(0,height);
                 ofEndShape();
-                shader.end();
                 break;
             case MULTI_ARROW:
-                shader.begin();
-                shader.setUniformTexture("tex",tex,0);
-                shader.setUniform2f("offset",offset.x,offset.y);
-                shader.setUniform1f("width",width);
-                shader.setUniform1f("height",height);
-                shader.setUniform1f("HH",ofGetHeight());
                 ofSetPolyMode(OF_POLY_WINDING_ODD);	// this is the normal mode
-
                 ofBeginShape();
                     ofVertex(0,0);
                     ofVertex((width+height*1.75)*m-height*1.75,0);
@@ -295,15 +252,8 @@ public:
                     ofVertex((width+height*1.75)*m-height,height);
                     ofVertex((width+height*1.75)*m-height*0.5,height*0.5);
                 ofEndShape();
-                shader.end();
                 break;
             case RECTANGLES:
-                shader.begin();
-                shader.setUniformTexture("tex",tex,0);
-                shader.setUniform2f("offset",offset.x,offset.y);
-                shader.setUniform1f("width",width);
-                shader.setUniform1f("height",height);
-                shader.setUniform1f("HH",ofGetHeight());
                 ofSetRectMode(OF_RECTMODE_CENTER);
                 for(int x=0;x<RECTANGLES_X;x++){
                     for(int y=0;y<RECTANGLES_Y;y++){
@@ -317,7 +267,6 @@ public:
                         }
                     }
                 }
-                shader.end();
                 break;
             case HORIZONTAL:
                 if(o){
@@ -326,6 +275,7 @@ public:
                 else{
                     ofTranslate(m*width-width,0);
                 }
+                shader.setUniform2f("offset",offset.x-m*width,offset.y);
                 tex.draw(0,0);
                 break;
             case VERTICAL:
@@ -338,6 +288,7 @@ public:
                 tex.draw(0,0);
                 break;
         }
+        shader.end();
         ofPopMatrix();
     }
     
