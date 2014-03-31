@@ -15,38 +15,23 @@ void testApp::setup(){
     ofPixels img;
     ofLoadImage(img,"Argentina.png");
     imgMasked.loadData(img);
-    ofLoadImage(img,"Argentina Inverted.png");
-    imgMasked.aux[0].loadData(img);
+    imgMasked.allocate();
     imgMasked.setAnchorPercent(0.5,0.5);
     imgMasked.setPosition(512,512);
-    imgMasked.setMaskType(HORIZONTAL);
+    imgMasked.setMaskType(RADIAL);
     imgMasked.setMaskOrientation(false);
     imgMasked.setMask(0.);
-    imgMasked.aux[0].setMaskType(VERTICAL);
-    imgMasked.aux[0].setMaskOrientation(true);
-    imgMasked.aux[0].setMask(0.);
-    
-    //PLAY
-    imgMasked.aux[0].mask.setDuration(2.);
-    imgMasked.aux[0].mask.setRepeatType(LOOP_BACK_AND_FORTH);
-    imgMasked.aux[0].mask.animateTo(1.);
-    
     imgMasked.mask.setDuration(2.);
     imgMasked.mask.setRepeatType(LOOP_BACK_AND_FORTH);
-    imgMasked.mask.animateToAfterDelay(1.,5.);
-    
-    time = ofGetElapsedTimef();
+    imgMasked.mask.animateTo(1.);
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-    float t = ofGetElapsedTimef();
-    float dt = t - time;
-    time = t;
+    float dt=1./ofGetFrameRate();
     img.update(dt);
     imgMasked.update(dt);
-    //imgMasked.setMaskCenter(ofVec2f((float)ofGetMouseX()/ofGetWidth(),(float)ofGetMouseY()/ofGetHeight()));
-    imgMasked.setPosition(ofGetMouseX(),ofGetMouseY());
+    imgMasked.setMaskCenter(ofVec2f((float)ofGetMouseX()/ofGetWidth(),(float)ofGetMouseY()/ofGetHeight()));
 }
 
 //--------------------------------------------------------------
@@ -57,38 +42,7 @@ void testApp::draw(){
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-    switch(imgMasked.type){
-        case RECTANGULAR_H:
-            imgMasked.setMaskType(RECTANGULAR_V);
-            break;
-        case RECTANGULAR_V:
-            imgMasked.setMaskType(CIRCULAR);
-            break;
-        case CIRCULAR:
-            imgMasked.setMaskType(RADIAL);
-            break;
-        case RADIAL:
-            imgMasked.setMaskType(DIAGONAL);
-            break;
-        case DIAGONAL:
-            imgMasked.setMaskType(ARROW);
-            break;
-        case ARROW:
-            imgMasked.setMaskType(MULTI_ARROW);
-            break;
-        case MULTI_ARROW:
-            imgMasked.setMaskType(RECTANGLES);
-            break;
-        case RECTANGLES:
-            imgMasked.setMaskType(HORIZONTAL);
-            break;
-        case HORIZONTAL:
-            imgMasked.setMaskType(VERTICAL);
-            break;
-        case VERTICAL:
-            imgMasked.setMaskType(RECTANGULAR_H);
-            break;
-    }
+
 }
 
 //--------------------------------------------------------------
