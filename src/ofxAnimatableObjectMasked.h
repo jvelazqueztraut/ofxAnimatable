@@ -107,9 +107,7 @@ public:
         
 		shader.setupShaderFromSource(GL_FRAGMENT_SHADER, shaderProgram);
 		shader.linkProgram();
-        
-        detail = false;
-            
+                    
         width = height = 0;
     }
     
@@ -141,7 +139,7 @@ public:
         ofPushMatrix();
         ofFill();
         ofxAnimatableObject<ofFbo>::begin();
-        if(detail){
+        if(N==0){
             glBlendFuncSeparate(GL_ONE, GL_SRC_COLOR, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
         }
         ofClear(0,0);
@@ -345,16 +343,11 @@ public:
         return (ObjectMasked<T>::mask.isOrWillBeAnimating() || ofxAnimatableObject<ofFbo>::isOrWillBeAnimating());
     }
     
-    void setDetail(bool d){
-        detail=d;
-    }
-    
     ObjectMasked<T> aux[N];
 private:
     ofShader shader;
     ofPath p;
     float width;
     float height;
-    bool detail;
 };
 
