@@ -8,6 +8,13 @@
  */
 
 #include "ofxAnimatable.h"
+#ifndef M_PI
+	#define M_PI 3.14159265359
+#endif
+#ifndef M_PI_2
+	#define M_PI_2 1.57079632679
+#endif
+
 
 //from http://www.flong.com/texts/code/shapers_exp/
 

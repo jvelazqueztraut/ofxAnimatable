@@ -6,23 +6,14 @@
  *
  */
 
+#pragma once
+#include "ofMain.h"
 
 #define DEFAULT_ANIMATION_DURATION	1.0f
-
 
 #include <iostream>
 #include <Math.h>
 using namespace std;
-
-#pragma once
-
-#define OF_AVAILABLE true
-
-#if (OF_AVAILABLE)
-#include "ofMain.h"
-#endif
-
-
 
 enum AnimRepeat{
 	PLAY_ONCE = 0,

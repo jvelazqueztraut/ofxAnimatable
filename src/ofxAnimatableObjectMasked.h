@@ -343,7 +343,7 @@ public:
         return (ObjectMasked<T>::mask.isOrWillBeAnimating() || ofxAnimatableObject<ofFbo>::isOrWillBeAnimating());
     }
     
-    ObjectMasked<T> aux[N];
+    ObjectMasked<T> aux[N+1];
 private:
     ofShader shader;
     ofPath p;
