@@ -7,7 +7,11 @@
  */
 
 #pragma once
-#include "ofMain.h"
+#define OF_AVAILABLE true
+
+#if (OF_AVAILABLE)
+    #include "ofMain.h"
+#endif
 
 #define DEFAULT_ANIMATION_DURATION	1.0f
 

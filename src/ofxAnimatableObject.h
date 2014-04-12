@@ -27,11 +27,11 @@ template <class T>
 class ofxAnimatableObject : public T {
 public:
     ofxAnimatableObject() : T(){
-        size.reset(1.);
+        size.reset(1.0f);
         color.setColor(ofColor(255));
-        position.setPosition(ofPoint(0.,0.,0.));
-        rotation.setPosition(ofPoint(0.,0.,0.));
-		anchor.set(0,0);
+        position.setPosition(ofPoint(0.0f,0.0f,0.0f));
+        rotation.setPosition(ofPoint(0.0f,0.0f,0.0f));
+		anchor.set(0.0f,0.0f);
     }
     
     ~ofxAnimatableObject(){};
@@ -51,7 +51,7 @@ public:
         ofRotateX(rotation.getCurrentPosition().x);
         ofRotateY(rotation.getCurrentPosition().y);
         ofRotateZ(rotation.getCurrentPosition().z);
-        if(size.val()<0) ofScale(0.,0.,0.);
+        if(size.val()<=0.0f) ofScale(0.0f,0.0f,0.0f);
         else ofScale(size.val(),size.val(),size.val());
         ofSetColor(color.getCurrentColor());
         T::draw(0,0);
@@ -60,7 +60,7 @@ public:
     }
         
     void setPosition(ofPoint p){position.setPosition(p);}
-    void setPosition(float x, float y,float z=0.){setPosition(ofPoint(x,y,z));}
+    void setPosition(float x, float y,float z=0.0f){setPosition(ofPoint(x,y,z));}
     
     void setSize(float s){size.reset(s);}
     
@@ -70,7 +70,7 @@ public:
     void setColor(int b){setColor(ofColor(b));}
     
     void setRotation(ofPoint r){rotation.setPosition(r);}
-    void setRotation(float x, float y=0., float z=0.){setRotation(ofPoint(x,y,z));}
+    void setRotation(float x, float y=0.0f, float z=0.0f){setRotation(ofPoint(x,y,z));}
     
     bool isOrWillBeAnimating(){
         return (position.isOrWillBeAnimating() || size.isOrWillBeAnimating() || color.isOrWillBeAnimating() || rotation.isOrWillBeAnimating());
@@ -111,11 +111,11 @@ template <class T>
 class ofxAnimatableObject<T *> {
 public:
     ofxAnimatableObject(){
-        size.reset(1.);
+        size.reset(1.0f);
         color.setColor(ofColor(255));
-        position.setPosition(ofPoint(0.,0.,0.));
-        rotation.setPosition(ofPoint(0.,0.,0.));
-		anchor.set(0,0);
+        position.setPosition(ofPoint(0.0f,0.0f,0.0f));
+        rotation.setPosition(ofPoint(0.0f,0.0f,0.0f));
+		anchor.set(0.0f,0.0f);
     }
     
     ~ofxAnimatableObject(){};
@@ -139,7 +139,7 @@ public:
         ofRotateX(rotation.getCurrentPosition().x);
         ofRotateY(rotation.getCurrentPosition().y);
         ofRotateZ(rotation.getCurrentPosition().z);
-        if(size.val()<0) ofScale(0.,0.,0.);
+        if(size.val()<0.0f) ofScale(0.0f,0.0f,0.0f);
         else ofScale(size.val(),size.val(),size.val());
         ofSetColor(color.getCurrentColor());
         _ptr->draw(0,0);
@@ -148,7 +148,7 @@ public:
     }
     
     void setPosition(ofPoint p){position.setPosition(p);}
-    void setPosition(float x, float y,float z=0.){setPosition(ofPoint(x,y,z));}
+    void setPosition(float x, float y,float z=0.0f){setPosition(ofPoint(x,y,z));}
     
     void setSize(float s){size.reset(s);}
     
@@ -158,7 +158,7 @@ public:
     void setColor(int b){setColor(ofColor(b));}
     
     void setRotation(ofPoint r){rotation.setPosition(r);}
-    void setRotation(float x, float y=0., float z=0.){setRotation(ofPoint(x,y,z));}
+    void setRotation(float x, float y=0.0f, float z=0.0f){setRotation(ofPoint(x,y,z));}
     
     bool isOrWillBeAnimating(){
         return (position.isOrWillBeAnimating() || size.isOrWillBeAnimating() || color.isOrWillBeAnimating() || rotation.isOrWillBeAnimating());
