@@ -29,6 +29,7 @@ class ofxAnimatableFloat : public ofxAnimatable{
 		float val();								///gives you the current value.
 		float getCurrentValue(){ return val(); }
 		float getTargetValue(){ return targetVal_;}
+        float getTargetTempValue(){ return targetTempVal_;}
 		float getOriginalValue(){ return originalVal_;}
 
 		void reset(float newVal);					///sets an original value, and stops animation
