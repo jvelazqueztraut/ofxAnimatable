@@ -90,8 +90,8 @@ public:
 	}
 
 	bool inside(ofPoint p){
-		int width=T::getWidth();
-		int height=T::getHeight();
+		int width=T::getWidth()*size.getCurrentValue();
+		int height=T::getHeight()*size.getCurrentValue();;
 		ofRectangle rect(position.getCurrentPosition()-anchor*ofPoint(width,height),width,height);
 		return rect.inside(p);
 	}
@@ -178,8 +178,8 @@ public:
 	}
 
 	bool inside(ofPoint p){
-		int width=_ptr->getWidth();
-		int height=_ptr->getHeight();
+		int width=_ptr->getWidth()*size.getCurrentValue();
+		int height=_ptr->getHeight()*size.getCurrentValue();
 		ofRectangle rect(position.getCurrentPosition()-anchor*ofPoint(width,height),width,height);
 		return rect.inside(p);
 	}
