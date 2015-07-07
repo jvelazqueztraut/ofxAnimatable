@@ -148,11 +148,8 @@ public:
         if(N>0){
             for(int i=(N-1);i>=0;i--){
                 if(aux[i].isAllocated()){
-                    if(aux[i].mask.val()==1.){
-                        aux[i].draw(0,0);
-                    }
-                    else if(aux[i].mask.val()){
-                        updateFbo(aux[i].getTextureReference(),aux[i].mask.val(),aux[i].type,aux[i].orientation,aux[i].center);
+                    if(aux[i].mask.val()){
+                        updateFbo(aux[i].getTextureReference(),aux[i].mask.val(),aux[i].type,aux[i].orientation,aux[i].center,ObjectMasked<T>::mask.val());
                     }
                 }
             }
@@ -170,7 +167,7 @@ public:
         ofPopStyle();
     }
     
-    void updateFbo(ofTexture& tex, float m, MaskType t, bool o, ofVec2f c){
+    void updateFbo(ofTexture& tex, float m, MaskType t, bool o, ofVec2f c,float mm=0.){
         switch(t){
             case RECTANGULAR_H:
                 shader.begin();
@@ -239,6 +236,11 @@ public:
                     ofVertex((width+height)*m,height*c.y);
                     ofVertex((width+height)*m-height*(1-c.y),height);
                     ofVertex(0,height);
+                    if(mm){
+                        ofVertex((width+height)*mm-height*(1-c.y),height);
+                        ofVertex((width+height)*mm,height*c.y);
+                        ofVertex((width+height)*mm-height*c.y,0);
+                    }
                 ofEndShape();
                 shader.end();
                 break;
@@ -320,6 +322,10 @@ public:
     
     float getHeight(){
         return ofxAnimatableObject<ofFbo>::getHeight();
+    }
+    
+    bool isAllocated(){
+        return ofxAnimatableObject<ofFbo>::isAllocated();
     }
     
     void setAnchorPercent(float xPct,float yPct){

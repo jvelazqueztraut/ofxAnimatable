@@ -7,7 +7,7 @@
  */
 
 #pragma once
-#define OF_AVAILABLE true
+#define OF_AVAILABLE 1
 
 #if (OF_AVAILABLE)
     #include "ofMain.h"
