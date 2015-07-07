@@ -139,7 +139,7 @@ public:
         ofPushMatrix();
         ofFill();
         ofxAnimatableObject<ofFbo>::begin();
-        if(N==0){
+        if(N<2){
             glBlendFuncSeparate(GL_ONE, GL_SRC_COLOR, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
         }
         ofClear(0,0);
@@ -356,4 +356,3 @@ private:
     float width;
     float height;
 };
-
