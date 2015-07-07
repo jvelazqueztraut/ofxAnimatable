@@ -394,7 +394,7 @@ void ofxAnimatable::update(float dt){
 		
 		percentDone_ += direction_ * transitionSpeed_ * dt;
 		
-		if ( percentDone_ >= 1.0f || percentDone_ <= 0.0f ){
+		if ( (direction_ == 1 && percentDone_ >= 1.0f) || (direction_ == -1 && percentDone_ <= 0.0f) ){
 
 			animating_ = false;
 			

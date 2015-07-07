@@ -75,6 +75,7 @@ class ofxAnimatable{
 		void setDropObjectParams(float bounceHeightPercent){bounceAmp = bounceHeightPercent;} //only for DROP_OBJECT curve
 
 		float getDuration(){ return 1.0f/transitionSpeed_; }
+        AnimCurve getCurve(){ return curveStyle_; }
 
 		float getPercentDone();			///get how much of the animation has been "walked"
 		void setPercentDone(float p);			//Will allow to skip to any point of animation. use carefully

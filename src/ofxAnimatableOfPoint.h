@@ -44,7 +44,8 @@ class ofxAnimatableOfPoint : public ofxAnimatable{
 		//gets
 		ofPoint getCurrentPosition();
 		ofPoint getTargetPosition(){ return targetPoint_;}
-		ofPoint getOriginalPosition(){ return originalPoint_;}
+        ofPoint getTargetTempPosition(){ return targetTempPoint_;}
+        ofPoint getOriginalPosition(){ return originalPoint_;}
     
     void setUsePath(bool _usePath);
     void loadPath(string _file);
