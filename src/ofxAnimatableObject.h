@@ -232,7 +232,7 @@ public:
         if(size.val()<=0.0f) ofScale(0.0f,0.0f,0.0f);
         else ofScale(size.val(),size.val(),size.val());
         ofSetColor(color.getCurrentColor());
-        ofTranslate(-anchor.x*ofTrueTypeFont::stringWidth(text),-anchor.y*ofTrueTypeFont::stringHeight(text)-ofTrueTypeFont::lineHeight);
+        ofTranslate(-anchor.x*ofTrueTypeFont::stringWidth(text),-anchor.y*ofTrueTypeFont::stringHeight(text)+ofTrueTypeFont::lineHeight);
         ofTrueTypeFont::drawString(text,0,0);
         ofPopStyle();
         ofPopMatrix();
