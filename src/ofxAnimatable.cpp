@@ -180,10 +180,10 @@ void ofxAnimatable::drawCurve(int x, int y, int size){
 	string name = ofxAnimatable::getCurveName(curveStyle_);
 	glPointSize(1);
 	glColor4ub(255,255,255, 64);
-	ofLine(xx,yy + s, xx + s, yy + s);
-	ofLine(xx,yy, xx, yy + s);
+	ofDrawLine(xx,yy + s, xx + s, yy + s);
+	ofDrawLine(xx,yy, xx, yy + s);
 	glColor4ub(255,255,255, 32);
-	ofLine(xx,yy + s, xx + s, yy );
+	ofDrawLine(xx,yy + s, xx + s, yy );
 	glColor4ub(255,255,255, 255);
 	ofMesh m;
 	m.setMode(OF_PRIMITIVE_LINE_STRIP);

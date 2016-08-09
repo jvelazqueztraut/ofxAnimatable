@@ -176,7 +176,7 @@ public:
                     ofTranslate(width,0);
                     ofScale(-1,1);
                 }
-                ofRect(0,0,width*m,height);
+                ofDrawRectangle(0,0,width*m,height);
                 shader.end();
                 break;
             case RECTANGULAR_V:
@@ -186,13 +186,13 @@ public:
                     ofTranslate(0,height);
                     ofScale(1,-1);
                 }
-                ofRect(0,0,width,height*m);
+                ofDrawRectangle(0,0,width,height*m);
                 shader.end();
                 break;
             case CIRCULAR:
                 shader.begin();
                 shader.setUniformTexture("tex",tex,0);
-                ofCircle(width*c.x,height*c.y,RADIUS(width,height,c.x,c.y)*m);
+                ofDrawCircle(width*c.x,height*c.y,RADIUS(width,height,c.x,c.y)*m);
                 shader.end();
                 break;
             case RADIAL:
@@ -281,10 +281,10 @@ public:
                     for(int y=0;y<RECTANGLES_Y;y++){
                         if(m>(x*RECTANGLES_Y+y)*RECTANGLES_DELAY){
                             if((m-(x*RECTANGLES_Y+y)*RECTANGLES_DELAY)/RECTANGLES_TIME<1.){
-                                ofRect((x*2+1)*width/(RECTANGLES_X*2),(y*2+1)*height/(RECTANGLES_Y*2),width/(RECTANGLES_X)*(m-(x*RECTANGLES_Y+y)*RECTANGLES_DELAY)/RECTANGLES_TIME,height/(RECTANGLES_Y)*(m-(x*RECTANGLES_Y+y)*RECTANGLES_DELAY)/RECTANGLES_TIME);
+                                ofDrawRectangle((x*2+1)*width/(RECTANGLES_X*2),(y*2+1)*height/(RECTANGLES_Y*2),width/(RECTANGLES_X)*(m-(x*RECTANGLES_Y+y)*RECTANGLES_DELAY)/RECTANGLES_TIME,height/(RECTANGLES_Y)*(m-(x*RECTANGLES_Y+y)*RECTANGLES_DELAY)/RECTANGLES_TIME);
                             }
                             else{
-                                ofRect((x*2+1)*width/(RECTANGLES_X*2),(y*2+1)*height/(RECTANGLES_Y*2),width/RECTANGLES_X,height/RECTANGLES_Y);
+                                ofDrawRectangle((x*2+1)*width/(RECTANGLES_X*2),(y*2+1)*height/(RECTANGLES_Y*2),width/RECTANGLES_X,height/RECTANGLES_Y);
                             }
                         }
                     }

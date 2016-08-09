@@ -30,7 +30,7 @@ void ofxAnimatableOfPoint::draw(){
 		ofPoint p = getCurrentPosition();
 		ofTranslate(p.x, p.y, p.z);
 		float s = 10.0f;
-		ofRect( -s * 0.5f, -s * 0.5f, s, s );
+		ofDrawRectangle( -s * 0.5f, -s * 0.5f, s, s );
 	ofPopMatrix();
 	
 }
@@ -130,13 +130,16 @@ void ofxAnimatableOfPoint::loadPath(string _file){
     path.clear();
     ofBuffer buf=ofBufferFromFile(_file);
     //Read file line by line
-    while (!buf.isLastLine()) {
-        string line = buf.getNextLine();
-        //Split line into strings
-        vector<string> p = ofSplitString(line, ",");
-        path.addVertex(ofToFloat(p[0]),ofToFloat(p[1]));
+    if(buf.size()) {
+        for (ofBuffer::Line it = buf.getLines().begin(), end = buf.getLines().end(); it != end; ++it) {
+            string line = *it;
+            if(line.empty() == false) {
+                //Split line into strings
+                vector<string> p = ofSplitString(line, ",");
+                path.addVertex(ofToFloat(p[0]),ofToFloat(p[1]));
+            }
+        }
     }
-
 }
 
 void ofxAnimatableOfPoint::loadPath(ofPolyline _path){
